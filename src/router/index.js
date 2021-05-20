@@ -1,22 +1,91 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Index from '../views/Index.vue'
+import Profile from '../views/Profile.vue'
+import Myquestion from "../views/profile/Myquestion";
+import Message from "../views/profile/Message";
+import Publish from '../views/Publish.vue'
+import Question from '../views/Question.vue'
+import Error from "../views/Error";
+import PageNot from "../views/PageNotFound";
+import Github from "../views/Github";
+import Register from "../views/Register";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Index',
+    redirect:{name:'QuestionList'}
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/index',
+    name: 'QuestionList',
+    component: Index
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/profile/myquestion',
+    name: 'Myquestion',
+    meta: {
+      requireAuth: true
+    },
+    component: Myquestion
+  },
+  {
+    path: '/profile/message',
+    name: 'Message',
+    meta: {
+      requireAuth: true
+    },
+    component: Message
+  },
+  {
+    path: '/publish/add',
+    name: 'Publish',
+    meta: {
+      requireAuth: true
+    },
+    component: Publish
+  },
+  {
+    path: '/publish/:questionId',
+    name: 'Publish',
+    meta: {
+      requireAuth: true
+    },
+    component: Publish
+  },
+  {
+    path: '/question/:questionId',
+    name: 'Question',
+    component: Question
+  },
+  {
+    path: '/error',
+    name: 'Error',
+    component: Error
+  },
+  {
+    path: '/callback',
+    name: 'Github',
+    component: Github
+  },
+  {
+    path: '/*',
+    name: 'PageNotFound',
+    component: PageNot
   }
 ]
 
@@ -25,5 +94,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+//解决导航栏重复点击路由错误
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 export default router
