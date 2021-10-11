@@ -23,6 +23,26 @@ axios.interceptors.response.use(response => {
                     duration: 2 * 1000
                 })
             }
+            else if(res.code === 2011){//如果是token过期，将前端的token的清除同时弹出信息
+
+                // 弹窗异常信息
+                Element.Message({
+                    message: "登陆信息已过期，请重新登陆",
+                    type: 'error',
+                    duration: 2 * 1000
+                })
+                store.commit("SET_TOKEN", '')//修改store里的token
+                router.go(0);//刷新页面
+            }
+            else if(res.code === 2016){//如果是token过期，将前端的token的清除同时弹出信息
+
+                // 弹窗异常信息
+                Element.Message({
+                    message: res.message,
+                    type: 'error',
+                    duration: 2 * 1000
+                })
+            }
             else{
                 store.commit('SET_ERROR',res.message)//把错误信息填入全局变量
                 router.push({
@@ -35,13 +55,14 @@ axios.interceptors.response.use(response => {
     },
     error => {//捕获后端的异常
         console.log('err' + error)// for debug
-        if(error.response.data){
-            error.message=error.response.data.msg
-        }
+        console.log(error)
         Element.Message({
-            message: error.message,
+            message: error,
             type: 'error',
             duration: 3 * 1000
         })
+        if(error.response.data){
+            error.message=error.response.data.msg
+        }
         return Promise.reject(error)
     })

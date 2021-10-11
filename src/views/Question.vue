@@ -130,10 +130,12 @@
                 <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
               </div>
               <div v-for=" related in relatedQuestions">
-                <el-link :underline="false" >
-                  <span class="related-text">{{related.title}}
-                  </span>
-                </el-link>
+                <router-link :to="{name: 'Question', params: {questionId: related.id}}">
+                  <el-link :underline="false" >
+                    <span class="related-text">{{related.title}}</span>
+                  </el-link>
+                </router-link>
+
                 <i style="padding: 5px 0px;color: #909399;margin-left: 10px" class="el-icon-chat-dot-square">
                   <span style="font-size: 13px"> {{related.comment_count}} </span>
                 </i>
@@ -188,6 +190,7 @@ const clickoutside = {
 export default {
   name: "Question.vue",
   components: {Header},
+  inject:['reload'],
   data(){
     return{
       question: {
@@ -214,6 +217,7 @@ export default {
       receiver_id:-1,//评论要发送的对象id
     }
   },
+
   created() {
     const questionId = this.$route.params.questionId
     console.log(questionId)
@@ -254,6 +258,13 @@ export default {
       this.hasLogin = true
       console.log(this.hasLogin)
     }
+  },
+  watch: {
+    '$route.params.questionId':function(val, old) {
+      if (val !== old) {
+        this.reload()
+      }
+    },
   },
   directives: {clickoutside},
   methods: {

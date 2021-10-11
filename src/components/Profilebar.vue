@@ -19,6 +19,10 @@
         </el-badge>
         <span slot="title">我的消息</span>
       </el-menu-item>
+      <el-menu-item :index="'/profile/information'">
+        <i class="el-icon-menu"></i>
+        <span slot="title">基本设置</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

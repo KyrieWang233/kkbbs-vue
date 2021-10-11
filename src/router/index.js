@@ -11,6 +11,8 @@ import Error from "../views/Error";
 import PageNot from "../views/PageNotFound";
 import Github from "../views/Github";
 import Register from "../views/Register";
+import supplierAllBack from "@/views/supplierAllBack";
+import Information from "@/views/profile/UserInformation";
 
 Vue.use(VueRouter)
 
@@ -52,6 +54,14 @@ const routes = [
     component: Message
   },
   {
+    path: '/profile/information',
+    name: 'Information',
+    meta: {
+      requireAuth: true
+    },
+    component: Information
+  },
+  {
     path: '/publish/add',
     name: 'Publish',
     meta: {
@@ -81,6 +91,11 @@ const routes = [
     path: '/callback',
     name: 'Github',
     component: Github
+  },
+  {
+    path: '/supplierAllBack',
+    name: supplierAllBack,
+    component: supplierAllBack
   },
   {
     path: '/*',

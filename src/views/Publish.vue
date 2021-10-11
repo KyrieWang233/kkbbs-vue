@@ -15,6 +15,7 @@
                   <el-form-item  label="内容" prop="description">
                     <mavon-editor style="height: 500px"
                                   ref="md"
+                                  placeholder="请输入文档内容(上传文件小于3MB)..."
                                   @imgAdd="imgAdd"
                                   v-model="ruleForm.description"></mavon-editor>
                   </el-form-item>
@@ -92,6 +93,7 @@ export default {
     imgAdd(pos, $file) {
       let formdata = new FormData();
       formdata.append('image', $file);
+      console.log(formdata.get('image'))
       //访问后台服务器方法
       this.$axios.post('/file/upload',formdata).then(res => {
         if (res.data.data.success === 1) {

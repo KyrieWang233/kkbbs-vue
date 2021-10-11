@@ -23,7 +23,8 @@
                         <span class="text-desc">
                         <span>{{scope.row.comment_count}}</span> 个评论 •
                         <span>{{scope.row.view_count}}</span> 次浏览 •
-                        <span>{{scope.row.gmt_modified}}</span>更新 </span>
+                        <span>{{scope.row.gmt_modified}}</span>更新 •
+                          <span>{{scope.row.gmt_create}}</span>发布 </span>
                       </div>
                     </template>
                   </el-table-column>
@@ -42,7 +43,7 @@
                       <el-button
                           size="mini"
                           type="danger"
-                          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                          @click="handleDelete(scope.row.id)">Delete</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -69,9 +70,11 @@
 <script>
 import Header from "@/components/Header";
 import Profilebar from "../../components/Profilebar";
+import router from "@/router";
 export default {
   name: "Myquestion.vue",
   components: {Profilebar, Header},
+  inject:['reload'],
   data() {
     return {
       questions:[],
@@ -98,8 +101,16 @@ export default {
     handleEdit(questionId) {
       this.$router.push("/publish/"+questionId);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(questionId) {
+      this.$axios.delete('/question/' + questionId).then((res) => {
+        if(res.data.code==200){
+          this.$message.success("删除成功")
+          this.reload()
+        }
+        else{
+          this.$message.error("删除问题失败")
+        }
+      })
     }
   },
   created() {

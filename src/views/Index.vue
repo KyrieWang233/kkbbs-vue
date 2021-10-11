@@ -10,11 +10,12 @@
             <div>
               <el-card shadow="never" >
                 <h3 style="font-family:Hiragino Sans GB"><i class="el-icon-reading"></i> 芜湖~</h3>
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="最新" name="first"></el-tab-pane>
-                  <el-tab-pane label="周榜" name="second"></el-tab-pane>
-                  <el-tab-pane label="月榜" name="third"></el-tab-pane>
-                  <el-tab-pane label="消灭零回复" name="fourth"></el-tab-pane>
+                <el-tabs v-model="sort" @tab-click="handleClick">
+                  <el-tab-pane label="最新" name="new"></el-tab-pane>
+                  <el-tab-pane label="月榜" name="hot30"></el-tab-pane>
+                  <el-tab-pane label="周榜" name="hot7"></el-tab-pane>
+                  <el-tab-pane label="最热" name="hot"></el-tab-pane>
+                  <el-tab-pane label="消灭零回复" name="no"></el-tab-pane>
                 </el-tabs>
               </el-card>
               <div class="line"></div>
@@ -43,20 +44,16 @@
                         <i class="iconfont el-icon-time"></i><span style="font-size: 15px"> {{question.gmt_create}}</span>
                       </div>
                     </div>
-
                   </div>
-
-
-                  <!--                <el-row :gutter="10">
-                                    <el-col :span="2">
-
-                                      <el-image :src="question.user.avatar_url"></el-image>
-                                    </el-link>
-                                    </el-col>
-                                    <el-col :span="18">
-
-                                    </el-col>
-                                  </el-row>-->
+                </el-card>
+              </div>
+              <div v-show="questions.length===0">
+                <el-card shadow="hover" >
+                  <div style="display: flex; justify-content: center;">
+                    <span class="page-text">
+                    暂无问题
+                  </span>
+                  </div>
                 </el-card>
               </div>
             </div>
@@ -73,10 +70,27 @@
           </el-col>
           <!--右边分布-->
           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-            <el-card class="box-card" shadow="hover">
+            <el-card class="box-card" shadow="never">
+              <div slot="header">
+                <span>热门话题</span>
+              </div>
+              <!--标签内容-->
+              <div class="tag-group">
+                <el-button
+                    v-for="hotTag in hots"
+                    :key="hotTag"
+                    style="margin:5px"
+                    type="primary"
+                    plain
+                    size="small"
+                    @click="hottags(hotTag)">
+                  {{ hotTag }}
+                </el-button>
+              </div>
+            </el-card>
+            <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>作者微信</span>
-                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
               </div>
               <div style="display: flex; justify-content: center;">
                 <el-image style="width: 300px; height: 300px; "
@@ -103,18 +117,21 @@ export default {
       questions: {},
       total:0,
       currentPage: 1,
-      pageSize: 5,
-      activeName: 'second'//控制开头选项
+      pageSize: 10,
+      search:'',
+      sort: 'new',//控制开头选项
+      hots: {},
+      tag: '',//用来搜索tag
     }
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      this.page(1)
     },
     page(currentPage) {
       //包含请求头，这样登录首页直接根据token登录
       const _this = this
-      this.$axios.get('http://localhost:8081/?page=' + currentPage).then((res) => {
+      this.$axios.get('http://localhost:8081/?page=' + currentPage+"&size="+this.pageSize+'&search='+this.search+'&tag='+this.tag+'&sort='+this.sort).then((res) => {
         _this.questions = res.data.data.questionDtos
         for (const question of _this.questions) {
           question.gmt_create = _this.$moment(question.gmt_create).format('YYYY-MM-DD')
@@ -122,9 +139,23 @@ export default {
         _this.currentPage = res.data.data.currentPage
         _this.total = res.data.data.totalPages*_this.pageSize
       })
+      this.$axios.get("http://localhost:8081/hottags").then((res) => {
+        _this.hots = res.data.data
+          }
+      )
+    },
+    hottags(tag){
+      this.$router.push({path:'/',query:{tag}})
+      this.$router.go(0);
     }
   },
   created() {
+    if(this.$route.query.search!=null&&this.$route.query.search!=undefined){
+      this.search = this.$route.query.search
+    }
+    if(this.$route.query.tag!=null&&this.$route.query.tag!=undefined){
+      this.tag = this.$route.query.tag
+    }
     this.page(1)
   },
   mounted() {
@@ -164,6 +195,20 @@ export default {
 }
 /deep/ .el-card__body {
   padding: 0px;
+}
+.tag-group{
+  margin: 5px 0px 0px 0px;
+  text-align: left;
+}
+.page-text{
+  line-height: 60px;
+  width: 50%;
+  color: #909399;
+  text-align: center;
+  justify-content: center;
+}
+.box-card{
+  margin-bottom: 10px;
 }
 
 </style>

@@ -11,7 +11,13 @@ import 'mavon-editor/dist/css/index.css'
 import moment from 'moment'; //导入时间模块
 import './permission' // 路由拦截
 
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
+
+
+
 // use
+Vue.component(VueCropper)
 
 Vue.use(mavonEditor)
 
