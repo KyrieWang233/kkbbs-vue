@@ -52,7 +52,7 @@
                     <el-input v-model="form.name" style="max-width: 400px" :disabled="true"></el-input>
                   </el-form-item>
                   <el-form-item label="创建时间">
-                    <span class="time-information"> 时间</span>
+                    <span class="time-information"> {{form.gmt_create}}</span>
                   </el-form-item>
                   <el-form-item label="注册途径">
                     <el-avatar style="background: rgb(255 255 255);"
@@ -112,7 +112,6 @@ export default {
         this.$refs.cropper.replace(event.target.result);
       }
       reader.readAsDataURL(file);
-      console.log(this.dialogVisible)
     },
     cropImage() {
       //存储的是base64格式
@@ -139,7 +138,6 @@ export default {
       })
     },
     onSubmit() {
-      console.log('submit!');
 
       let userInfo = this.$store.getters.getUser
       //后续修改可以添加其他信息
@@ -151,7 +149,6 @@ export default {
           const userdata = res.data.data
           userInfo.avatar_url = userdata.avatar_url
           userInfo.gmt_modified = userdata.gmt_modified
-          console.log(userInfo)
           this.$store.commit("SET_USERINFO", userInfo)
           this.cropImg = userInfo.avatar_url
           this.$alert('操作成功', '提示', {

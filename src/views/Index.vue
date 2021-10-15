@@ -71,7 +71,7 @@
           <!--右边分布-->
           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
             <el-card class="box-card" shadow="never">
-              <div slot="header">
+              <div class="card-header">
                 <span>热门话题</span>
               </div>
               <!--标签内容-->
@@ -89,12 +89,21 @@
               </div>
             </el-card>
             <el-card class="box-card" shadow="never">
-              <div slot="header" class="clearfix">
+              <div class="card-header">
                 <span>作者微信</span>
               </div>
-              <div style="display: flex; justify-content: center;">
-                <el-image style="width: 300px; height: 300px; "
+              <div  style="display: flex; justify-content: center;">
+                <el-image class="avatar"
                           :src="require('../assets/img/wechat.jpg')"></el-image>
+              </div>
+              <p class="desc">我的快递，想寄就寄！</p>
+              <div class="social">
+                <div style=" padding: 8px;float: left;margin-top: 0px" class="desc">社交:</div>
+                <li style="padding: 8px; list-style:none;text-align: center;">
+                  <a target="_blank"><img class="link-img" src="../assets/img/QQ.png"  alt=""></a>
+                  <a style="margin-left: 5%;" href="https://github.com/KyrieWang233" target="_blank"><img class="link-img" src="../assets/img/github.png" alt=""></a>
+                  <a style="margin-left: 5%; margin-right: 10%" target="_blank"><img class="link-img" src="../assets/img/gitee.png"  alt=""></a>
+                </li>
               </div>
             </el-card>
           </el-col>
@@ -131,7 +140,7 @@ export default {
     page(currentPage) {
       //包含请求头，这样登录首页直接根据token登录
       const _this = this
-      this.$axios.get('http://localhost:8081/?page=' + currentPage+"&size="+this.pageSize+'&search='+this.search+'&tag='+this.tag+'&sort='+this.sort).then((res) => {
+      this.$axios.get('/?page=' + currentPage+"&size="+this.pageSize+'&search='+this.search+'&tag='+this.tag+'&sort='+this.sort).then((res) => {
         _this.questions = res.data.data.questionDtos
         for (const question of _this.questions) {
           question.gmt_create = _this.$moment(question.gmt_create).format('YYYY-MM-DD')
@@ -139,7 +148,7 @@ export default {
         _this.currentPage = res.data.data.currentPage
         _this.total = res.data.data.totalPages*_this.pageSize
       })
-      this.$axios.get("http://localhost:8081/hottags").then((res) => {
+      this.$axios.get("/hottags").then((res) => {
         _this.hots = res.data.data
           }
       )
@@ -209,6 +218,35 @@ export default {
 }
 .box-card{
   margin-bottom: 10px;
+}
+.avatar{
+  position: relative;
+  margin: 30px auto 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  z-index: 9
+}
+.card-header{
+  padding: 10px 0px;
+
+}
+.desc{
+  font-size: 15px;
+  color: #878d99;
+  line-height: 30px;
+  font-weight: 100;
+  text-align: center;
+}
+.social{
+  padding: 0 20px;
+  margin-top: 15px;
+}
+.link-img{
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  margin: auto;
 }
 
 </style>

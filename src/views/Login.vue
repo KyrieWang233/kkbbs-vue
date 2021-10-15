@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       param: {
-        username: "test",
-        password: "123456"
+        username: "",
+        password: ""
       },
       rules: {
         username: [
@@ -59,7 +59,6 @@ export default {
         if (valid) {
           const _this = this
           this.$axios.post('/login',this.param).then(res=>{
-            console.log(res.data)
             const jwt = res.headers['authorization']
             const userinfo = res.data.data
             //如果出现错误

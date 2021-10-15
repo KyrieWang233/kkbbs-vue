@@ -46,13 +46,12 @@
         </el-dropdown>
         <span class="header-name">{{userInfo.name}}</span>
       </div>
-
       <div  v-else>
         <router-link to="/login">
           <el-link style="padding: 10px" :underline="false">登录</el-link>
         </router-link>
         <el-link style="margin-left: 10px"
-            href="https://github.com/login/oauth/authorize?client_id=6161e3b8ad33e85e5cce&redirect_uri=http://localhost:8080/callback&scope=user&state=1"
+            href="https://github.com/login/oauth/authorize?client_id=6161e3b8ad33e85e5cce&scope=user&state=1"
                  :underline="false"
                  >
           <el-avatar style="background: rgb(255 255 255);"

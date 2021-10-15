@@ -71,7 +71,6 @@ export default {
         _this.notifications = res.data.data.notificationDtos
         for (const notification of _this.notifications) {
           notification.gmt_create = _this.$moment(notification.gmt_create).format('YYYY-MM-DD HH:mm')
-          console.log(notification.status)
         }
         _this.currentPage = res.data.data.currentPage
         _this.total = res.data.data.totalPages*_this.pageSize

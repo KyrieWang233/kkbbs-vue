@@ -93,7 +93,6 @@ export default {
     imgAdd(pos, $file) {
       let formdata = new FormData();
       formdata.append('image', $file);
-      console.log(formdata.get('image'))
       //访问后台服务器方法
       this.$axios.post('/file/upload',formdata).then(res => {
         if (res.data.data.success === 1) {
@@ -113,7 +112,6 @@ export default {
               "Authorization": localStorage.getItem("token")
             }
           }).then(res => {
-            console.log(res)
             _this.$alert('操作成功', '提示', {
               confirmButtonText: '确定',
               callback: action => {
@@ -124,7 +122,6 @@ export default {
           })
 
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
@@ -141,7 +138,6 @@ export default {
         }
       }else {
         _this.ruleForm.tag = selectTag
-        console.log(selectTag)
       }
     },
   },
@@ -149,7 +145,6 @@ export default {
   //创建时获取问题信息
   created() {
     const questionId = this.$route.params.questionId
-    console.log(questionId)
     const _this = this
     if(questionId) {
       this.$axios.get('/publish/' + questionId).then(res => {
@@ -164,7 +159,6 @@ export default {
     else{
       this.$axios.get('/publish/add').then(res => {
         _this.tags = res.data.data
-        console.log(_this.tags)
       })
     }
   }

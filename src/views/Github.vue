@@ -27,11 +27,9 @@ export default {
   created(){
     this.param.code = this.$route.query.code
     this.param.state = this.$route.query.state
-    console.log(this.param)
     //发送请求
     const _this = this
     this.$axios.get('/callback?code='+this.param.code+'&state='+this.param.state).then(res=>{
-      console.log(res.data)
       const jwt = res.headers['authorization']
       const userinfo = res.data.data
       //如果出现错误

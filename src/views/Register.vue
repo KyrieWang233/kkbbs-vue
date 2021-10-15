@@ -90,12 +90,12 @@ export default {
         if (valid) {
           const _this = this
           this.$axios.post('/register',this.param).then(res=>{
-            console.log(res.data)
             //如果出现错误
             if(res.data.code!==200){
               this.$message.error(res.data.message);
             }else {
               this.$message.success("注册成功");
+              this.$router.push("/login");
               //this.$router.push("/");
               //this.$router.go(0);
             }
@@ -109,7 +109,6 @@ export default {
     changeCode(){
       const _this = this
       this.$axios.get('/captcha').then(res=>{
-        console.log(res.data)
         _this.param.verKey = res.data.data.key
         _this.verImg = res.data.data.image
       })
